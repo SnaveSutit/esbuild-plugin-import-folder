@@ -75,7 +75,7 @@ function normalizePathToPosix(path: string) {
 	return path.replaceAll(sep, posix.sep)
 }
 
-const IMPORT_REGEX = /.+\/\*\*?(?:{(\..+)})?$/
+const IMPORT_REGEX = /(.+)(\/\*\*?)(?:{(\..+)})?$/
 
 /**
  * A plugin for importing all files in a folder without manually updating an index file.
@@ -96,10 +96,9 @@ export default function importFolder(): Plugin {
 
 		setup: build => {
 			build.onResolve({ filter: IMPORT_REGEX, namespace: 'file' }, args => {
-				const fullPath = normalizePathToPosix(join(args.resolveDir, args.path)).replace(
-					IMPORT_REGEX,
-					''
-				)
+				const [_, path, mode, extensions] = IMPORT_REGEX.exec(args.path)!
+
+				const fullPath = normalizePathToPosix(join(args.resolveDir, path))
 
 				const stat = statSync(fullPath)
 				if (!stat.isDirectory()) {
@@ -113,15 +112,13 @@ export default function importFolder(): Plugin {
 					}
 				}
 
-				const [, mode, extensionFilter] = IMPORT_REGEX.exec(args.path)!
-
 				return {
 					namespace: 'import-folder',
 					path: fullPath,
 					pluginData: {
 						recursive: mode === '/**',
 						importer: args.importer,
-						extensionFilter,
+						extensions,
 					},
 				}
 			})
@@ -129,8 +126,8 @@ export default function importFolder(): Plugin {
 			build.onLoad({ filter: /.+/, namespace: 'import-folder' }, args => {
 				let files: RecursiveDirEntry[]
 
-				const filteredExtensions = args.pluginData.extensionFilter
-					? args.pluginData.extensionFilter.split('|')
+				const filteredExtensions = args.pluginData.extensions
+					? args.pluginData.extensions.split('|')
 					: ['.js', '.ts']
 
 				const filter: RecursiveReadDirSyncOptions['filter'] = file => {
