@@ -1,0 +1,33 @@
+{
+	"name": "esbuild-plugin-import-folder",
+	"version": "1.0.0",
+	"description": "An esbuild plugin to import all files from a folder as if they were imported individually.",
+	"author": {
+		"name": "Titus Evans (SnaveSutit)",
+		"email": "SnaveSutit@gmail.com",
+		"url": "https://snavesutit.github.io/"
+	},
+	"repository": {
+		"url": "https://github.com/SnaveSutit/my-node-project-template"
+	},
+	"scripts": {
+		"dev": "tsx .scripts/esbuild.ts --dev",
+		"build": "tsx .scripts/esbuild.ts"
+	},
+	"devDependencies": {
+		"@types/node": "^24.9.1",
+		"chalk": "^5.6.2",
+		"commander": "^14.0.2",
+		"esbuild": "^0.25.11",
+		"eslint-plugin-check-file": "^3.3.0",
+		"jiti": "^2.6.1",
+		"node-modules-vscode-problems-patch": "^1.0.9",
+		"prettier": "^3.6.2",
+		"typescript-eslint": "^8.46.2",
+		"vitest": "^4.0.4"
+	},
+	"dependencies": {
+		"eslint": "^9.38.0"
+	},
+	"packageManager": "yarn@4.10.3"
+}

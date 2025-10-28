@@ -1,0 +1,16 @@
+{
+	"typeAcquisition": {
+		"enable": true
+	},
+	"compilerOptions": {
+		"outDir": "./dist/",
+		"noImplicitAny": true,
+		"module": "ESNext",
+		"target": "ESNext",
+		"moduleResolution": "node",
+		"strict": true,
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true
+	}
+}
