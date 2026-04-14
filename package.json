@@ -1,6 +1,6 @@
 {
 	"name": "esbuild-plugin-import-folder",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "An esbuild plugin to import all files from a folder as if they were imported individually.",
 	"author": {
 		"name": "Titus Evans (SnaveSutit)",
@@ -8,14 +8,26 @@
 		"url": "https://snavesutit.github.io/"
 	},
 	"repository": {
-		"url": "https://github.com/SnaveSutit/my-node-project-template"
+		"url": "https://github.com/SnaveSutit/esbuild-plugin-import-folder"
+	},
+	"files": [
+		"dist"
+	],
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"default": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
 	},
 	"scripts": {
-		"dev": "tsx .scripts/esbuild.ts --dev",
-		"build": "tsx .scripts/esbuild.ts"
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"prepublishOnly": "bun run build"
 	},
 	"devDependencies": {
-		"@types/node": "^24.9.1",
+		"@types/node": "^25.6.0",
 		"chalk": "^5.6.2",
 		"commander": "^14.0.2",
 		"esbuild": "^0.25.11",
@@ -23,11 +35,12 @@
 		"jiti": "^2.6.1",
 		"node-modules-vscode-problems-patch": "^1.0.9",
 		"prettier": "^3.6.2",
+		"typescript": "^6.0.2",
 		"typescript-eslint": "^8.46.2",
 		"vitest": "^4.0.4"
 	},
 	"dependencies": {
 		"eslint": "^9.38.0"
 	},
-	"packageManager": "yarn@4.10.3"
+	"packageManager": "yarn@4.13.0"
 }

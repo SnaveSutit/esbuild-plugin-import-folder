@@ -1,16 +1,25 @@
 {
-	"typeAcquisition": {
-		"enable": true
-	},
+	"include": ["src/**/*.ts", "types/**/*.d.ts"],
+	"exclude": ["**/node_modules/**"],
 	"compilerOptions": {
-		"outDir": "./dist/",
+		"rootDir": "src/",
+		"outDir": "dist/",
+		"declarationMap": true,
 		"noImplicitAny": true,
-		"module": "ESNext",
-		"target": "ESNext",
-		"moduleResolution": "node",
+		"module": "nodenext",
+		"target": "ES2022",
+		"moduleResolution": "nodenext",
 		"strict": true,
+		"types": ["node"],
 		"resolveJsonModule": true,
+		"declaration": true,
 		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true
+		"allowUmdGlobalAccess": true,
+		"allowUnreachableCode": true,
+		"esModuleInterop": true,
+		"isolatedModules": true,
+		"alwaysStrict": true,
+		"skipDefaultLibCheck": true,
+		"skipLibCheck": true
 	}
 }
