@@ -8,7 +8,8 @@
 		"url": "https://snavesutit.github.io/"
 	},
 	"repository": {
-		"url": "https://github.com/SnaveSutit/esbuild-plugin-import-folder"
+		"type": "git",
+		"url": "git+https://github.com/SnaveSutit/esbuild-plugin-import-folder.git"
 	},
 	"files": [
 		"dist"
