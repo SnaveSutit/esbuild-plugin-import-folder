@@ -75,18 +75,19 @@ function normalizePathToPosix(path: string) {
 	return path.replaceAll(sep, posix.sep)
 }
 
-const IMPORT_REGEX = /(.+)(\/\*\*?)(?:{(\..+)})?$/
+const IMPORT_REGEX = /import_folder(_recursive)?(?:{(\..+)})?:(.+)$/
 
 /**
  * A plugin for importing all files in a folder without manually updating an index file.
  *
- * Use the `/*` suffix to import all files in a folder.
+ * Use the `import_folder:` prefix to import all files in a folder.
  *
- * Use the `/**` suffix to import all files in a folder and it's subdirectories.
+ * Use the `import_folder_recursive:` prefix to import all files in a folder and it's subdirectories.
  *
  * Optionally, you can specify a set of file extensions to filter by using curly braces. (Includes .js and .ts by default)
  *
- * e.g. `/*{.ts|.js}`
+ * - `import_folder{.ts|.js}:./myFolder`
+ * - `import_folder_recursive{.ts|.js}:./myFolder`
  *
  * NOTE - If you're using a glob plugin, this plugin should be executed first.
  */
@@ -96,16 +97,31 @@ export default function importFolder(): Plugin {
 
 		setup: build => {
 			build.onResolve({ filter: IMPORT_REGEX, namespace: 'file' }, args => {
-				const [_, path, mode, extensions] = IMPORT_REGEX.exec(args.path)!
+				// Ignore imports from node_modules.
+				if (/node_modules/.exec(args.importer)) return
+
+				// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-unused-vars
+				const [_, mode, extensions, path] = IMPORT_REGEX.exec(args.path)!
 
 				const fullPath = normalizePathToPosix(join(args.resolveDir, path))
 
-				const stat = statSync(fullPath)
-				if (!stat.isDirectory()) {
+				try {
+					const stat = statSync(fullPath)
+					if (!stat.isDirectory()) {
+						return {
+							errors: [
+								{
+									text: `The path "${fullPath}" is not a directory.`,
+									location: { file: args.importer },
+								},
+							],
+						}
+					}
+				} catch (err) {
 					return {
 						errors: [
 							{
-								text: `The path "${fullPath}" is not a directory.`,
+								text: `Failed to import folder "${fullPath}" imported by ${args.importer}: ${String(err)}`,
 								location: { file: args.importer },
 							},
 						],
@@ -116,7 +132,7 @@ export default function importFolder(): Plugin {
 					namespace: 'import-folder',
 					path: fullPath,
 					pluginData: {
-						recursive: mode === '/**',
+						recursive: mode === '_recursive',
 						importer: args.importer,
 						extensions,
 					},
